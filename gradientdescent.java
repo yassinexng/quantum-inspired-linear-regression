@@ -2,8 +2,13 @@ import java.util.Arrays;
 
 public class gradientdescent {
 
-// Inner class to hold the results of the gradient descent process
+
+
+
 public static class gradientdescentResult {
+    
+//Simply put, we return the final results of a gradient descent run; including:
+//the weights, the bias and the costHistory (which is basically a record that we keep of the cost at each iteration)
     private double[] weights;
     private double bias;
     private double[] costHistory;
@@ -27,8 +32,9 @@ public static class gradientdescentResult {
     }
 }
 
-// Full gradient descent over multiple iterations
+/
 public static gradientdescentResult gradientDescent(double[][] X, double[] y, double learningRate, int iterations) {
+    //We first check the input values / learning rate / iterations if they're invalid
     if (X == null || y == null) {
         throw new IllegalArgumentException("Error: Input features (X) and target values (y) cannot be null.");
     }
@@ -44,13 +50,15 @@ public static gradientdescentResult gradientDescent(double[][] X, double[] y, do
     if (iterations <= 0) {
         throw new IllegalArgumentException("Error: Number of iterations must be positive. Provided: " + iterations);
     }
-
+    //Now, we initialize the initial values:
+    
     int nFeatures = X[0].length;
     double[] w = new double[nFeatures];
     double b = 0.0;
     int m = X.length;
     double[] costHistory = new double[iterations];
 
+    //Aaand here comes the gradient descent algorithm:
     for (int i = 0; i < iterations; i++) {
         prediction predictor = new prediction(w, b);
         double[] fwbPredictions = new double[m];
@@ -86,7 +94,7 @@ public static gradientdescentResult gradientDescent(double[][] X, double[] y, do
     return new gradientdescentResult(w, b, costHistory);
 }
 
-// Single-step gradient descent for each state existing in QuantumEnhancedTrainer
+// Single-step gradient descent (litteraly the same as the previous code) but for each state existing in QuantumEnhancedTrainer
 public static gradientdescentResult singleStep(double[][] X, double[] y, double[] w, double b, double learningRate) {
     int m = X.length;
     int n = X[0].length;
@@ -111,7 +119,6 @@ public static gradientdescentResult singleStep(double[][] X, double[] y, double[
     double newB = b - learningRate * dj_db;
 
     return new gradientdescentResult(newW, newB, new double[0]);
-    //The very same previous gradient descent algorrithn, but for different steps.
 }
 
 
