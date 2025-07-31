@@ -3,7 +3,7 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        / We're gonna use a function that's clearly not linear:
+        // We're gonna use a function that's clearly not linear:
         // y = x1 - x2 + cos(x1) - sin(x2)
         //and we're gonna see the comparison between it and the usual gradient descent
         // We make 500 data points with 2 features each
