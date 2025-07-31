@@ -3,70 +3,76 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        int numSamples = 500;
-        int numFeatures = 2;
-        double[][] X = new double[numSamples][numFeatures];
-        double[] y = new double[numSamples];
-        Random rand = new Random();
-
-        // We're gonna use a function that's clearly not linear:
+        / We're gonna use a function that's clearly not linear:
         // y = x1 - x2 + cos(x1) - sin(x2)
         //and we're gonna see the comparison between it and the usual gradient descent
-        for (int i = 0; i < numSamples; i++) {
-            X[i][0] = rand.nextDouble() * 20;
-            X[i][1] = rand.nextDouble() * 20;
+        // We make 500 data points with 2 features each
+        int totalPoints = 500;
+        double[][] inputData = new double[totalPoints][2]; // [x1, x2] for each point
+        double[] outputData = new double[totalPoints];     // The Y values
+        Random random = new Random();
 
-            double linearPart = X[i][0] - X[i][1];
-            double nonLinearPart = Math.cos(X[i][0]) - Math.sin(X[i][1]);
-            double trueY = linearPart + nonLinearPart;
+        // Now onto our dataset:
+        for (int i = 0; i < totalPoints; i++) {
+            // Here, we generate random x1 and x2 values between 0 and 20
+            double x1 = random.nextDouble() * 20;
+            double x2 = random.nextDouble() * 20;
             
-            y[i] = trueY + (rand.nextDouble() - 0.5) * 0.5;
+            // We store them
+            inputData[i][0] = x1;
+            inputData[i][1] = x2;
+            
+            // Calculate the parts separately: the linear and nonlinear(wavy) parts
+            double linearPart = x1 - x2;           
+            double wavePart = Math.cos(x1) - Math.sin(x2); 
+            
+            //Then, we combine parts and add some small random noise 
+            double perfectY = linearPart + wavePart;
+            double noisyY = perfectY + (random.nextDouble() - 0.5) * 0.5;
+            outputData[i] = noisyY; // now we update the Y values
         }
 
-        System.out.println("=Traditional Gradient Descent ===");
+        // Now for the regular gradient descent:
+        System.out.println("Regular Training:");
         try {
-            gradientdescent.gradientdescentResult classicResult =
-                gradientdescent.gradientDescent(X, y, 0.001, 100000);
+            gradientdescent.gradientdescentResult regular = 
+                gradientdescent.gradientDescent(inputData, outputData, 0.001, 100000);
 
-            System.out.println("Weights: " + Arrays.toString(classicResult.getWeights()));
-            System.out.println("Bias: " + classicResult.getBias());
-            System.out.println("Final Cost: " + costcalculator.costfunction(X, y, classicResult.getWeights(), classicResult.getBias()));
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error in Traditional Gradient Descent: " + e.getMessage());
+            System.out.println("Weights: " + Arrays.toString(regular.getWeights()));
+            System.out.println("Bias: " + regular.getBias());
+            System.out.println("Final Score: " + 
+                costcalculator.costfunction(inputData, outputData, 
+                regular.getWeights(), regular.getBias()));
+        } catch (Exception e) {
+            System.out.println(" Error: " + e.getMessage());
         }
 
-        System.out.println("\n=Quantum-Enhanced Optimization:");
-        int numQuantumStates = 15;
-        double quantumLearningRate = 0.001;
-        int quantumIterations = 50000;
-
-        MemoryBank memoryBank = new MemoryBank(numQuantumStates);
-
+        //Now for the quantum-inspired version
+        System.out.println("\n=== Quantum-Style Training ===");
+        MemoryBank memory = new MemoryBank(15); // Remembers 15 good solutions
+        
         try {
-            gradientdescent.gradientdescentResult quantumResult =
-                QuantumEnhancedTrainer.trainWithQuantumBoost(
-                    X, y,
-                    quantumLearningRate,
-                    quantumIterations,
-                    numQuantumStates,
-                    memoryBank
-                );
+            gradientdescent.gradientdescentResult quantum =
+                QuantumEnhancedTrainer.trainWithQuantumBoost, inputData, outputData, 0.001, 50000, 15, memory );   
+            
+            // We now show  the best found solution
+            System.out.println("Best Weights: " + Arrays.toString(quantum.getWeights()));
+            System.out.println("Best Bias: " + quantum.getBias());
+            System.out.println("Best Score: " + 
+                costcalculator.costfunction(inputData, outputData, 
+                quantum.getWeights(), quantum.getBias()));
 
-            System.out.println("Best Weights: " + Arrays.toString(quantumResult.getWeights()));
-            System.out.println("Best Bias: " + quantumResult.getBias());
-            System.out.println("Final Best Cost: " + costcalculator.costfunction(X, y, quantumResult.getWeights(), quantumResult.getBias()));
-
-            System.out.println("\nMemory Bank States:");
-            for (MemoryQuantumState state : memoryBank.getMemories()) {
-                double cost = 1.0 / (state.amplitude + 1e-8);
-                System.out.println(String.format("Amplitude = %.4f, Cost = %.4f, Weights = %s",
-                                                state.amplitude,
-                                                cost,
-                                                Arrays.toString(state.parameters)
-                                                ));
+            //  what we saved in memory
+            System.out.println("\nSaved Good Solutions:");
+            for (MemoryQuantumState solution : memory.getMemories()) {
+                double score = solution.amplitude;
+                double error = 1.0 / (score + 0.00000001); // Convert to error
+                System.out.println("Goodness: " + String.format("%.4f", score) + 
+                                 ", Error: " + String.format("%.4f", error) + 
+                                 ", Weights: " + Arrays.toString(solution.parameters));
             }
-        } catch (IllegalArgumentException e) {
-            System.err.println("Error in Quantum-Enhanced Gradient Descent: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Oops! Error: " + e.getMessage());
         }
     }
 }
