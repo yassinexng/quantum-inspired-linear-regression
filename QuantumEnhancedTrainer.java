@@ -11,13 +11,10 @@ public class QuantumEnhancedTrainer {
         MemoryBank memoryBank
     )
     //This is the main, public method that we would use on the Main.java file. Simply put, it takes all the necessary infortmation for the training process.
-    //The datasets X and Y, the learningrate for the gradient descent, the number of iterations, the number of parallel quantum states,
-    //The memoryBank which contains the best results
 
     
     {
         //This section sets up the initial conditions. It gets the number of features from the data, then creates a list of weights and bias for each of the numStates.
-        //Each state starts with all weights and the bias set to 0.0. This collection of initial, random starting points is the analogy for "superposition" in quantum mechanics—all states exist simultaneously.
         
         int nFeatures = X[0].length;
 
@@ -34,6 +31,9 @@ public class QuantumEnhancedTrainer {
         double bestBias = 0.0;
         double bestCost = Double.POSITIVE_INFINITY;
         double prevBestCost = bestCost;
+        //Each state starts with all weights and the bias set to 0.0. This collection of initial, random starting points is the analogy for "superposition" in quantum mechanics:
+        //All states exist simultaneously.
+        
 
         for (int iter = 0; iter < iterations; iter++) {
             // For each quantum state, we run one step of gradient descent manually
