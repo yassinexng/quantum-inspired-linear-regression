@@ -12,8 +12,9 @@ public class MemoryBank {
 
     public void add(double[] params, double cost) {
         double amplitude = 1.0 / (cost + 1e-8); 
-        //1e-8 is a very small number added to the denominator just in case the cost is exactly 0
-        // a lower cost (a better solution) should have a higher influence( a higher amplitude)
+        //We add 1e-8: it's a very small number, just in case the cost is exactly 0.
+        
+        //Also, a lower cost (implying a better solution) should have a higher amplitude
         
         memories.addFirst(new MemoryQuantumState(params, amplitude));
         //we simply bundle 'params' and its calculated amplitude in the new 'MemoryQuantumState' object
