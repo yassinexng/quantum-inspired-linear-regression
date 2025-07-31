@@ -1,55 +1,101 @@
 # Quantum-Inspired Linear Regression
 
-This repository implements a quantum-inspired linear regression algorithm, blending quantum mechanics principles with machine learning optimization to address local minima challenges.
+This repository implements a quantum-inspired linear regression algorithm, blending ideas from quantum mechanics with gradient descent to overcome optimization challenges like local minima.
 
-## Key Features
+---
 
-- **Superposition of States**: Explores multiple parameter states in parallel for a broader solution search.
-- **Quantum Tunneling**: Uses stochastic noise to escape local minima.
-- **Modular Architecture**: Organized Java classes for clarity and extensibility.
-- **Detailed Explanation**: Includes a PDF with theoretical and mathematical insights.
+## 🚀 Features
 
-## Getting Started
+- **Superposition of States**: Explores multiple parameter vectors in parallel.
+- **Quantum Tunneling**: Adds controlled random noise to escape stagnation.
+- **Memory Bank**: Stores and reuses high-performing models based on cost.
+- **Java Implementation**: Pure Java with no external libraries required.
+- **Human-Readable Documentation**: Includes both code and theory in a structured way.
 
-1. Clone the repository:
+---
 
-   ```bash
-   git clone https://github.com/yassinexng/quantum-inspired-linear-regression.git
-   cd quantum-inspired-linear-regression
+## 🧪 How It Works
 
+The core idea is to simulate two key quantum concepts:
 
-Compile and run from the project root:
+### 1. Superposition  
+Instead of training just one parameter vector `θ`, we train `N` of them simultaneously. Each evolves separately using gradient descent.
+
+### 2. Quantum Tunneling  
+If a state stagnates (its cost doesn't improve), we inject a small amount of random noise:
+
+```java
+double noise = (Math.random() * 2 - 1) * scale;
+````
+
+This lets the model escape bad local minima, just like a quantum particle can tunnel through a potential barrier.
+
+### 3. Memory Bank
+
+We save the best parameter states so far, with their amplitude (probability of reuse) proportional to `1 / cost`.
+
+---
+
+## 🧠 Core Components
+
+| File                          | Role                                                |
+| ----------------------------- | --------------------------------------------------- |
+| `gradientdescent.java`        | Main optimization logic + one-step update method    |
+| `QuantumEnhancedTrainer.java` | Quantum-inspired training loop w/ noise + memory    |
+| `MemoryBank.java`             | Stores best parameter vectors with their cost       |
+| `prediction.java`             | Predicts `y = w·x + b`                              |
+| `costcalculator.java`         | Computes cost using MSE formula                     |
+| `Main.java`                   | Uses hardcoded training data to run both optimizers |
+
+---
+
+## 🏁 How to Run
+
+1. **Open the project**
+
+   Make sure you are in the root folder of the project.
+
+2. **Compile and run**
+
+```bash
 javac src/*.java
 java -cp src Main
+```
 
+This will output weights and bias found by:
 
-Explore the project:
+* Traditional Gradient Descent
+* Quantum-Enhanced Optimization
 
-Read QuantumInspiredLinearRegression.pdf for a detailed explanation of the quantum-inspired approach.
+⚠️ **Note**: The training data is already provided inside `Main.java` as an array. You don't need to load from a CSV.
 
+---
 
+## 🔬 Quantum Enhancements in Simple Terms
 
-Implementation Details
-Core Components
+* **Superposition**: Keeps N parameter vectors `{θ₁, θ₂, ..., θₙ}` and trains them in parallel.
+* **Amplitude-Based Selection**: Best-performing vectors are reused more often:
+  `P(θᵢ) ∝ 1 / J(θᵢ)`
+* **Tunneling**: If a state gets stuck, we let it jump randomly by adding noise:
 
-gradientdescent.java: Implements batch gradient descent and a singleStep() method for individual parameter updates.
-
-QuantumEnhancedTrainer.java: Manages multiple parameter vectors, applying tunneling via noise when solutions plateau:
+```java
 double noise = (Math.random() * 2 - 1) * scale;
+```
 
+This keeps the model exploring new possibilities even when some solutions are trapped.
 
-Memory System (MemoryBank.java, MemoryQuantumState.java): Stores top parameter vectors with amplitudes proportional to 1/cost.
+---
 
-prediction.java: Computes the linear prediction: f_w,b(x) = w * x + b.
+## 📘 Learn More
 
-costcalculator.java: Calculates the Mean Squared Error (MSE) cost: J(θ) = (1/(2m)) * Σ(h_θ(x_i) - y_i)^2.
+Check out [`QuantumInspiredLinearRegression.pdf`](./QuantumInspiredLinearRegression.pdf) for:
 
+* Core quantum mechanics principles (superposition, tunneling)
+* Why traditional gradient descent can get stuck
+* How this project uses physics ideas to improve ML training
 
-Quantum Enhancements
+---
 
-Superposition: Maintains N parallel parameter vectors {θ_1, θ_2, ..., θ_N} to explore the loss landscape.
-Amplitude Probabilities: Assigns P(θ_i) ∝ 1/J(θ_i) to prioritize low-cost states.
-Tunneling: Adds controlled noise to stuck solutions, enabling jumps to new parameter regions.
+## 🤝 Contribute
 
-About
-This project explores quantum-inspired optimization for machine learning. The QuantumInspiredLinearRegression.pdf provides theoretical background and implementation details. Contributions and feedback are welcome!```
+Suggestions, issues, or pull requests are always welcome!
